@@ -1,0 +1,18 @@
+# Abaqus output and scratch files - never commit models or results
+*.odb
+*.cae
+*.jnl
+*.rpy*
+*.rec
+*.lck
+*.dat
+*.msg
+*.sta
+*.com
+*.prt
+*.sim
+abaqus.rpy*
+inbox/
+outbox/
+__pycache__/
+*.pyc
