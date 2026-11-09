@@ -2,7 +2,7 @@
 
 Run Python scripts inside a running **Abaqus/CAE** session from **WSL**, and get their output back in the terminal.
 
-> **Status: v1.1.0.** Tested on Abaqus/CAE 2026 Learning Edition (Windows 11 + WSL2).
+> **Status: v1.2.0.** Tested on Abaqus/CAE 2026 Learning Edition (Windows 11 + WSL2).
 
 ```
 $ abq ping
@@ -93,6 +93,24 @@ After loading the server in CAE, type `/abq` alone to connect: the agent runs `a
 the models it sees. Type `/abq <task>` (for example `/abq make a 2 m cantilever I-beam and run a static step`)
 to have it build and run the model. Install an agent CLI after abaqus-remote? Run `./install.sh` again.
 Skip the agent setup with `./install.sh --no-agents`.
+
+### Where it works
+
+| Where | How |
+|---|---|
+| WSL terminal (Claude Code, Codex, Gemini CLI) | `/abq` (`$abq` in Codex) |
+| VS Code / Cursor **connected to WSL** | same as the WSL terminal - the extension runs inside WSL |
+| VS Code opened on **Windows**, Claude desktop app's Code tab, Windows Codex/Gemini | `/abq`, using the Windows copy of the skill and `abq.cmd` |
+| PowerShell / cmd / Git Bash yourself | `abq ping`, `abq C:\path\script.py` |
+| Normal chat in the Claude app or claude.ai | not possible - chats cannot run commands on your PC |
+
+For the Windows side, `install.sh` puts `abq.cmd` (PowerShell/cmd) and `abq` (Git Bash) in
+`%USERPROFILE%\.abq_remote\bin`, adds that folder to your user PATH, and copies the skill into
+`%USERPROFILE%\.claude\skills\abq` (and `.codex\skills`, `.gemini\commands` if those exist).
+They call the same `abq.sh` inside WSL, so WSL must be installed but nothing else.
+Restart VS Code or the app after the first install so it sees the new PATH.
+The Windows skill files are copies: run `./install.sh` again after `git pull`.
+Skip the Windows part with `--no-windows`.
 
 ## License
 

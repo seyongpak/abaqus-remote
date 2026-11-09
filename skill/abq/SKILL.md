@@ -7,7 +7,10 @@ description: Connect to and drive a running Abaqus/CAE session on Windows from W
 
 The `abq` shell command (installed by abaqus-remote's `install.sh`) sends an Abaqus Python
 script into the user's open Abaqus/CAE and prints what it printed.
-If `abq` is not on PATH, try `~/.local/bin/abq`.
+If `abq` is not on PATH, try `~/.local/bin/abq` (WSL) or `%USERPROFILE%\.abq_remote\bin\abq.cmd`
+(Windows; from PowerShell `& "$env:USERPROFILE\.abq_remote\bin\abq.cmd" ping`).
+The same `abq` works from WSL, PowerShell, cmd and Git Bash; on Windows give normal Windows
+paths (`C:\...\script.py`) and it converts them.
 
 ## Invoked with no task: connect
 1. Run `abq ping`.

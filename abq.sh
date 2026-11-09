@@ -8,6 +8,10 @@
 set -e
 HERE=$(dirname "$(readlink -f "$0")")
 [ "${1:-}" = ping ] && set -- "$HERE/examples/ping.py" "${2:-20}"
+# Called from Windows (abq.cmd / Git Bash wrapper): convert C:\... or \\wsl.localhost\... paths
+case "${1:-}" in
+  [A-Za-z]:[\\/]*|\\\\*) set -- "$(wslpath -u "$1")" "${@:2}" ;;
+esac
 [ -f "${1:-}" ] || { echo "usage: abq script.py [timeout_s]   |   abq ping"; exit 2; }
 if [ -z "$ABQ_REMOTE" ]; then
   win_home=$(cmd.exe /c 'echo %USERPROFILE%' 2>/dev/null | tr -d '\r')

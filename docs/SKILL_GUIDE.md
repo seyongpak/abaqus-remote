@@ -18,6 +18,9 @@
  abq prints the output → the agent reads it → fixes the script or answers you
 ```
 
+On Windows (VS Code opened on Windows, Claude desktop app), the agent calls `abq.cmd`, which runs
+the same `abq` inside WSL with `wsl.exe` - the rest of the picture is identical.
+
 So there is no plugin, API or network server. A **skill** is just a Markdown file that tells the agent
 *when* to use the `abq` command and *how*. The agent does the rest with its normal shell tool.
 
