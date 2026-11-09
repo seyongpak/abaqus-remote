@@ -18,7 +18,7 @@ models: ['Model-1']
 git clone https://github.com/seyongpak/abaqus-remote.git && cd abaqus-remote && ./install.sh
 ```
 In Abaqus/CAE: **File > Run Script… → `%USERPROFILE%\.abq_remote\abq_server.py`**, click the `>>>` line,
-then in Claude Code, Codex or Gemini CLI type **`/abq`** (Codex: **`$abq`**). Add a task after it, e.g.
+then type **`/abq`** in Claude Code or Gemini CLI, or **`$abq`** in Codex. Add a task after it, e.g.
 `/abq make a 2 m steel cantilever with a 1 kN tip load and give me the tip deflection`.
 
 How the skill works, and how to write your own in five lines: [docs/SKILL_GUIDE.md](docs/SKILL_GUIDE.md).
