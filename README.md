@@ -2,15 +2,26 @@
 
 Run Python scripts inside a running **Abaqus/CAE** session from **WSL**, and get their output back in the terminal.
 
-> **Status: v1.0.0.** Tested on Abaqus/CAE 2026 Learning Edition (Windows 11 + WSL2).
+> **Status: v1.1.0.** Tested on Abaqus/CAE 2026 Learning Edition (Windows 11 + WSL2).
 
 ```
-$ ./abq.sh examples/ping.py 20
+$ abq ping
 OK
 python 3.x.x
 models: ['Model-1']
 ...
 ```
+
+## Quick start with an AI agent
+
+```bash
+git clone https://github.com/seyongpak/abaqus-remote.git && cd abaqus-remote && ./install.sh
+```
+In Abaqus/CAE: **File > Run Script… → `%USERPROFILE%\.abq_remote\abq_server.py`**, click the `>>>` line,
+then in Claude Code or Gemini CLI type **`/abq`** (Codex: **`$abq`**). Add a task after it, e.g.
+`/abq make a 2 m steel cantilever with a 1 kN tip load and give me the tip deflection`.
+
+How the skill works, and how to write your own in five lines: [docs/SKILL_GUIDE.md](docs/SKILL_GUIDE.md).
 
 ## How it works
 
@@ -38,7 +49,7 @@ cd abaqus-remote
 ./install.sh
 ```
 
-This copies `abq_server.py` to `%USERPROFILE%\.abq_remote\` and creates `inbox\` and `outbox\`.
+This copies `abq_server.py` to `%USERPROFILE%\.abq_remote\`, creates `inbox\` and `outbox\`, links the `abq` command into `~/.local/bin`, and sets up `/abq` for the AI CLIs it finds (see below).
 To use another folder, set `ABQ_REMOTE` (a WSL path) before both `install.sh` and `abq.sh`.
 
 ## Use
@@ -48,7 +59,8 @@ To use another folder, set `ABQ_REMOTE` (a WSL path) before both `install.sh` an
 2. Click the **>>>** command line at the bottom of the CAE window.
 3. From WSL:
    ```bash
-   ./abq.sh your_script.py [timeout_seconds]   # default timeout 600 s
+   abq ping                                   # check the connection
+   abq your_script.py [timeout_seconds]       # default timeout 600 s
    ```
    The first output line is `OK` or `ERROR`; on error the traceback follows.
    `abq.sh` exits with 0 for `OK`, 1 for `ERROR` or timeout, 2 for setup problems (CAE not running, not installed).
@@ -66,9 +78,21 @@ To use another folder, set `ABQ_REMOTE` (a WSL path) before both `install.sh` an
 `abq_server.py` executes **any** `.py` file placed in `inbox\`, with full access to CAE and your files.
 Keep the queue folder on your own machine. Do not put it in a shared, network or cloud-synced folder.
 
-## Using it with Claude Code (optional)
+## Using it from AI coding agents: `/abq`
 
-`skill/SKILL.md` describes the tool for Claude Code. Copy the folder to `~/.claude/skills/abaqus-remote/` and set the `abq.sh` path inside it; Claude can then build and run Abaqus models through this tool.
+`install.sh` also sets up an `/abq` command for each AI CLI it finds:
+
+| Agent | Installed to | Type |
+|---|---|---|
+| Claude Code | `~/.claude/skills/abq` (link to `skill/abq`) | `/abq` |
+| OpenAI Codex CLI | `~/.codex/skills/abq` (link to `skill/abq`) | `$abq` (or pick it from `/skills`) |
+| Gemini CLI | `~/.gemini/commands/abq.toml` | `/abq` |
+| Any other agent | reads `AGENTS.md` in this repo | ask it to "use abq" |
+
+After loading the server in CAE, type `/abq` alone to connect: the agent runs `abq ping` and reports
+the models it sees. Type `/abq <task>` (for example `/abq make a 2 m cantilever I-beam and run a static step`)
+to have it build and run the model. Install an agent CLI after abaqus-remote? Run `./install.sh` again.
+Skip the agent setup with `./install.sh --no-agents`.
 
 ## License
 

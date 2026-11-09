@@ -2,10 +2,13 @@
 # Send a Python file to the running Abaqus/CAE (abq_server.py) and print its output.
 # Drops the job in inbox\, then types  abqrun + Enter  into CAE's >>> command line.
 # CAE drops fast synthetic keystrokes, so keys go one at a time, with retries.
-# usage: abq.sh script.py [timeout_s]
+# usage: abq script.py [timeout_s]     run a script in CAE
+#        abq ping [timeout_s]          check the connection (read-only)
 # Queue folder: $ABQ_REMOTE if set, else %USERPROFILE%\.abq_remote on Windows.
 set -e
-[ -f "${1:-}" ] || { echo "usage: abq.sh script.py [timeout_s]"; exit 2; }
+HERE=$(dirname "$(readlink -f "$0")")
+[ "${1:-}" = ping ] && set -- "$HERE/examples/ping.py" "${2:-20}"
+[ -f "${1:-}" ] || { echo "usage: abq script.py [timeout_s]   |   abq ping"; exit 2; }
 if [ -z "$ABQ_REMOTE" ]; then
   win_home=$(cmd.exe /c 'echo %USERPROFILE%' 2>/dev/null | tr -d '\r')
   ABQ_REMOTE="$(wslpath "$win_home")/.abq_remote"
