@@ -27,7 +27,11 @@ foreach ($k in @("a","b","q","r","u","n","{ENTER}")) { $ws.SendKeys($k); Start-S
 for ((i=0; i<${2:-600}*2; i++)); do
   # (re)type the trigger at t=0, 4 s, 8 s while the job is still queued
   if [ -f "$R/inbox/$name.py" ] && (( i % 8 == 0 && i <= 16 )); then poke; fi
-  [ -f "$R/outbox/$name.done" ] && { cat "$R/outbox/$name.log"; rm -f "$R/outbox/$name".*; exit 0; }
+  if [ -f "$R/outbox/$name.done" ]; then
+    log="$R/outbox/$name.log"; cat "$log"
+    status=0; [ "$(head -n1 "$log" | tr -d "\r")" = OK ] || status=1
+    rm -f "$R/outbox/$name".*; exit $status
+  fi
   sleep 0.5
 done
 # Remove the queued job so it does not run unexpectedly on the next abqrun.

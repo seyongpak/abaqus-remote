@@ -2,7 +2,7 @@
 
 Run Python scripts inside a running **Abaqus/CAE** session from **WSL**, and get their output back in the terminal.
 
-> **Status: v0.1.0 (pre-release).** Tested on Abaqus/CAE 2026 Learning Edition with the original version of these scripts; this packaged version has not yet been tested end-to-end.
+> **Status: v1.0.0.** Tested on Abaqus/CAE 2026 Learning Edition (Windows 11 + WSL2).
 
 ```
 $ ./abq.sh examples/ping.py 20
@@ -51,6 +51,7 @@ To use another folder, set `ABQ_REMOTE` (a WSL path) before both `install.sh` an
    ./abq.sh your_script.py [timeout_seconds]   # default timeout 600 s
    ```
    The first output line is `OK` or `ERROR`; on error the traceback follows.
+   `abq.sh` exits with 0 for `OK`, 1 for `ERROR` or timeout, 2 for setup problems (CAE not running, not installed).
 
 ## Known issues
 
